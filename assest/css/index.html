@@ -1,22 +1,233 @@
+<!DOCTYPE html>
+
 <html lang="en">
 
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="assest\css\style.css">
+
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
-    <script src="assets\javascript\app.js"></script>
-    <script type="text/javascript"></script>
 
+    <title>GIFtastic</title>
 
-    <title>Animal Api</title>
 </head>
 
 
-    
+
+<body>
+
+
+
+    <div class="div class=" container-fluids>
+
+
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h5 class="card-title">GIFtastic</h5>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-3">
+
+        <div class="card" style="width: 18rem;">
+
+            <div class="card-header">
+
+                <form id="search-form">
+
+                    <label id="search-input">Search Giffy</label>
+
+                    <input type="text" id="search-input"><br>
+
+                    <input id="addSearch" type="submit" value="Submit">
+
+                </form>
+
+
+
+
+
+            </div>
+
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item">
+
+                    <div id="buttonsArea"></div>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
 
         
 
+        <div class="col-9">
+
+            <div id="searches" ></div>
+
+        
+
+    </div>
+
+
+
+    </div>
+
+</div>
+<script>
+    
+
+
+$(function() {
+
+Buttons(searchArray, 'searchButton', '#buttonsArea');
+
+
+
+})
+
+
+
+var searchArray = ['Cat', 'dog', 'bird', 'mice', 'horse', 'pig'];
+
+
+
+function Buttons(searchArray, classToAdd, areaToAddTo) {
+
+
+
+$(areaToAddTo).empty();
+
+for(var i=0;i<searchArray.length;i++){
+
+    var a = $('<button>');
+
+    a.addClass(classToAdd);
+
+    a.attr('data-type', searchArray[i]);
+
+    a.text(searchArray[i]);
+
+    $(areaToAddTo).append(a);
+
+}
+
+
+
+}
+
+$(document).on('click', '.searchButton', function() {
+
+var type = $(this).data('type');
+
+
+var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + type + '&api_key=VeC9H7pDgCpvSRyW5LfrSgOJSnp24U55';
+
+$.ajax({url: queryURL, method: 'GET'})
+
+    .done(function(response) {
+
+    
+
+        for(var i=0;i<response.data.length; i++) {
+
+            var searchDiv = $('<div class="search-item">');
+
+            var rating = response.data[i].rating;
+
+            var p = $('<div>').text('Rating: ' + rating);
+
+            
+
+            
+
+            var animated = response.data[i].images.fixed_height.url;
+
+            var still = response.data[i].images.fixed_height_still.url;
+
+        
+            var image = $('<img>');
+
+            
+
+            image.attr('src', still);
+
+            image.attr('data-still', still);
+
+            image.attr('data-animated', animated);
+
+            image.attr('data-state', 'still');
+
+            
+
+            image.addClass('searchImage');
+
+        
+
+            searchDiv.prepend(p);
+
+            searchDiv.prepend(image);
+
+            $('#searches').prepend(searchDiv);
+
+
+
+        }
+
+    })
+
+
+
+})
+
+
+
+$(document).on('click', '.searchImage', function() { 
+
+var state = $(this).attr('data-state');
+
+if (state === 'still') {
+
+    $(this).attr('src', $(this).data('animated'));
+
+    $(this).attr('data-state', 'animated');
+
+} else {
+
+    $(this).attr('src', $(this).data('still'));
+
+    $(this).attr('data-state', 'still');
+
+}
+
+
+
+
+
+})
 
 
 
@@ -28,16 +239,37 @@
 
 
 
-            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-        <script src="assets\javascript\app1.js"></script>
-        <script type="text/javascript"></script>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="assets/javascript/app.js"></script>
+
 
 
 </body>
+
+
 
 </html>
